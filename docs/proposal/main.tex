@@ -1,0 +1,56 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=18mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{microtype}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[colorlinks=true,urlcolor=blue,citecolor=blue]{hyperref}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\newcommand{\topic}[1]{\par\textbf{#1}\enspace}
+\begin{document}
+\begin{center}
+{\large\bfseries Selecting the Number of PCA Components with GabrielRegularised\\[2pt]
+Under Different Noise Structures}\par
+\vspace{3pt}
+{\small HDDA Research Proposal \enspace|\enspace Research track, direction 3}
+\end{center}
+\vspace{-5pt}
+
+\topic{1. Research question.}
+How does noise structure affect the accuracy of selecting the number of principal components in PCA using GabrielRegularised + Wmax, compared with ordinary Gabriel + Wmax, at matched expected noise power?
+
+\topic{2. Evidence and motivation.}
+Arciniegas-Alarc\'on et al.~\cite{arciniegas2024} recommend GabrielRegularised + Wmax following Gaussian simulations and real-data comparisons, but recommend other criteria under very strong noise. Owen and Wang~\cite{owen2016} study heterogeneous noise in factor selection and distinguish recovering the true rank from optimally recovering the signal. Together, these studies motivate a focused extension: measuring whether the fixed Wmax pipeline retains its performance under heavy-tailed and unequal-variance noise, conditions outside the root paper's synthetic evaluation.
+
+\topic{3. Existing work and contribution.}
+Principal component analysis (PCA) approximates a centered data matrix using a chosen number of components; this number is the rank of the approximation. Gabriel CV selects it by predicting held-out entries using low-rank approximations. GabrielRegularised changes the singular values used in prediction. We will keep Wmax fixed to isolate the effect of regularisation and benchmark how often each pipeline selects too many or too few PCA components under controlled noise changes.
+
+\topic{4. Data and experimental design.}
+We will generate $X=S+E$ using a Python reproduction of the public
+\href{https://github.com/cran/denoiseR/blob/master/R/LRsim.R}{\texttt{denoiseR::LRsim} generator}.
+The initial configurations $(n,p,r)$ are $(100,10,5)$ and $(30,100,10)$, including $p>n$.
+We will use the generator's SNR levels $0.5,2,4$, with $\|S\|_F=1$ and $\sigma=1/(\mathrm{SNR}\sqrt{np})$.
+Noise conditions are independent Gaussian, Student-$t_5$ scaled to unit variance, and Gaussian with column variances in a $9{:}1$ ratio (equal-sized groups, mean variance one), each multiplied by $\sigma$.
+Thus $\mathbb{E}\|E\|_F^2=\mathrm{SNR}^{-2}$ in every condition.
+We plan 100 independent repetitions per condition (1,800 matrices), sharing the signal across noise conditions within each repetition. Seeds, generation code and results will be public; no private data are needed.
+
+\topic{5. Comparisons.}
+Both GabrielRegularised + Wmax and Gabriel + Wmax will run on every generated matrix, with identical preprocessing and candidate-rank ranges verified against the reference implementation. Gaussian controls will precede the extensions. Wmax will not be retuned by noise condition; low-SNR outcomes will be interpreted as results for this fixed pipeline.
+
+\topic{6. Measures of success.}
+Primary measures are exact rank recovery $\Pr(\hat r=r)$ and mean absolute rank error $\mathbb{E}|\hat r-r|$. Signed error and runtime will provide supporting diagnostics. We will report 95\% Monte Carlo uncertainty intervals and paired differences between methods. Success means a validated implementation and a quantified account of when performance changes; either preservation or loss of the regularised method's advantage is informative.
+
+\topic{7. Main risk and fallback.}
+Differences between the Python port and the reference procedure could be mistaken for noise effects. Before the benchmark, we will compare held-out predictions and selected ranks on fixed matrices and reproduce Gaussian controls. If discrepancies remain, we will prioritise a documented reproduction study and defer robustness claims until the implementation is validated.
+
+\vspace{-4pt}
+\begingroup
+\footnotesize
+\setlength{\bibsep}{1pt}
+\bibliographystyle{plainnat}
+\bibliography{references}
+\endgroup
+\end{document}

@@ -1,0 +1,17 @@
+[project]
+name = "hdda-rank-selection"
+version = "0.1.0"
+description = "HDDA research on PCA component selection under different noise structures"
+readme = "README.md"
+authors = [
+    { name = "Rodion Chikibaev", email = "r.chikibaev@innopolis.university" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[project.scripts]
+hdda-rank-selection = "hdda_rank_selection:main"
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"

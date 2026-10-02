@@ -29,10 +29,9 @@ Arciniegas-Alarc\'on et al.~\cite{arciniegas2024} recommend GabrielRegularised +
 Principal component analysis (PCA) approximates a centered data matrix using a chosen number of components; this number is the rank of the approximation. Gabriel CV selects it by predicting held-out entries using low-rank approximations. GabrielRegularised changes the singular values used in prediction. We will keep Wmax fixed to isolate the effect of regularisation and benchmark how often each pipeline selects too many or too few PCA components under controlled noise changes.
 
 \topic{4. Data and experimental design.}
-We will generate $X=S+E$ using a Python reproduction of the public
-\href{https://github.com/cran/denoiseR/blob/master/R/LRsim.R}{\texttt{denoiseR::LRsim} generator}.
+We will generate synthetic matrices $X=S+E$, with a known-rank signal $S$ and additive noise $E$, following the simulation setup in~\cite{arciniegas2024}.
 The initial configurations $(n,p,r)$ are $(100,10,5)$ and $(30,100,10)$, including $p>n$.
-We will use the generator's SNR levels $0.5,2,4$, with $\|S\|_F=1$ and $\sigma=1/(\mathrm{SNR}\sqrt{np})$.
+We will use SNR levels $0.5,2,4$, with $\|S\|_F=1$ and $\sigma=1/(\mathrm{SNR}\sqrt{np})$.
 Noise conditions are independent Gaussian, Student-$t_5$ scaled to unit variance, and Gaussian with column variances in a $9{:}1$ ratio (equal-sized groups, mean variance one), each multiplied by $\sigma$.
 Thus $\mathbb{E}\|E\|_F^2=\mathrm{SNR}^{-2}$ in every condition.
 We plan 100 independent repetitions per condition (1,800 matrices), sharing the signal across noise conditions within each repetition. Seeds, generation code and results will be public; no private data are needed.
